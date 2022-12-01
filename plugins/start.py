@@ -1,4 +1,8 @@
 #(©)CodeXBotz
+
+
+
+
 import os
 import asyncio
 from pyrogram import Client, filters, __version__
@@ -7,24 +11,17 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, 
 from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 
 from bot import Bot
-from config import ADMINS, FORCE_MSG, START_MSG, OWNER_ID, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT
+from config import ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT
 from helper_func import subscribed, encode, decode, get_messages
 from database.database import add_user, del_user, full_userbase, present_user
 
 
-#=====================================================================================##
-
-WAIT_MSG = """"<b>Processing ....</b>"""
-
-REPLY_ERROR = """<code>Use this command as a replay to any telegram message with out any spaces.</code>"""
-
-#=====================================================================================##
 
 
 @Bot.on_message(filters.command('start') & filters.private & subscribed)
 async def start_command(client: Client, message: Message):
     id = message.from_user.id
-    f not await present_user(id):
+    if not await present_user(id):
         try:
             await add_user(id)
         except:
@@ -91,8 +88,8 @@ async def start_command(client: Client, message: Message):
         reply_markup = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("Filmy Hangama 👻", url = "https://t.me/FILMY_HANGAMA")
                     InlineKeyboardButton("😊 About Me", callback_data = "about"),
+                    InlineKeyboardButton("👻 Filmy Hangama", url = "telegram.dog/filmy_hangama"),
                     InlineKeyboardButton("🔒 Close", callback_data = "close")
                 ]
             ]
@@ -111,12 +108,23 @@ async def start_command(client: Client, message: Message):
         )
         return
 
+    
+#=====================================================================================##
+
+WAIT_MSG = """"<b>Processing ...</b>"""
+
+REPLY_ERROR = """<code>Use this command as a replay to any telegram message with out any spaces.</code>"""
+
+#=====================================================================================##
+
+    
+    
 @Bot.on_message(filters.command('start') & filters.private)
 async def not_joined(client: Client, message: Message):
     buttons = [
         [
             InlineKeyboardButton(
-                "Join Channel",
+                "Join Channel 🈁",
                 url = client.invitelink)
         ]
     ]
@@ -124,7 +132,7 @@ async def not_joined(client: Client, message: Message):
         buttons.append(
             [
                 InlineKeyboardButton(
-                    text = 'Try Again',
+                    text = 'Try Again 🔁',
                     url = f"https://t.me/{client.username}?start={message.command[1]}"
                 )
             ]
@@ -182,13 +190,13 @@ async def send_text(client: Bot, message: Message):
                 pass
             total += 1
         
-        status = f"""<b><u>Broadcast Completed</u>
+        status = f"""<b><u>Broadcast Completed 🙋‍♂️</u>
 
-👮‍♂️ Total Users: <code>{total}</code>
-😪 Successful: <code>{successful}</code>
-❌ Blocked Users: <code>{blocked}</code>
-🚫 Deleted Accounts: <code>{deleted}</code>
-😓 Unsuccessful: <code>{unsuccessful}</code></b>"""
+🟢 Total Users: <code>{total}</code>
+🟡 Successful: <code>{successful}</code>
+🚫 Blocked Users: <code>{blocked}</code>
+➖ Deleted Accounts: <code>{deleted}</code>
+🔴 Unsuccessful: <code>{unsuccessful}</code></b>"""
         
         return await pls_wait.edit(status)
 
